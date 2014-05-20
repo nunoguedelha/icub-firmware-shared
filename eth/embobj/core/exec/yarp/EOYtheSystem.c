@@ -31,7 +31,7 @@
 #include "math.h"
 
 #if     defined(EOY_SYS_USE_FEATURE_INTERFACE)
-#include "FeatureInterface.h"
+//#include "FeatureInterface.h"
 #endif
 
 

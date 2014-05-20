@@ -40,7 +40,10 @@ feature_summary(WHAT ENABLED_FEATURES
 
 
 get_property(targets GLOBAL PROPERTY icub_firmware_shared_TARGETS)
-set(path_vars)
+
+
+get_property(icub_firmware_shared_embobj_INCLUDE_DIR GLOBAL PROPERTY icub_firmware_shared_embobj_BUILD_INCLUDE_DIR)
+
 foreach(target ${targets})
     list(APPEND path_vars icub_firmware_shared_${target}_INCLUDE_DIR)
 endforeach()
@@ -57,8 +60,20 @@ install(FILES ${CMAKE_BINARY_DIR}/icub_firmware_shared-config-version.cmake
 # icub_firmware_shared-config.cmake (build tree)
 foreach(target ${targets})
     get_property(icub_firmware_shared_${target}_INCLUDE_DIR GLOBAL PROPERTY icub_firmware_shared_${target}_BUILD_INCLUDE_DIR)
+    
     get_filename_component(icub_firmware_shared_${target}_INCLUDE_DIR "${icub_firmware_shared_${target}_INCLUDE_DIR}" ABSOLUTE)
+    
+    message("${target} folders are ${icub_firmware_shared_${target}_INCLUDE_DIR}")
+    
+    foreach(folder ${icub_firmware_shared_${target}_INCLUDE_DIR})
+    
+    get_filename_component(tmp_INCLUDE_DIR "${folder}" ABSOLUTE)
+    message("${target} includes are ${tmp_INCLUDE_DIR}")
+    set(icub_firmware_shared_${target}_INCLUDE_DIR ${icub_firmware_shared_${target}_INCLUDE_DIR} ${tmp_INCLUDE_DIR})
+    endforeach()
+    message(" firmware/eth final: ${icub_firmware_shared_${target}_INCLUDE_DIR}")
 endforeach()
+
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/icub_firmware_shared-config.cmake.in
                               ${CMAKE_BINARY_DIR}/icub_firmware_shared-config.cmake
                               INSTALL_DESTINATION ${CMAKE_BINARY_DIR}
@@ -79,11 +94,16 @@ install(FILES ${CMAKE_BINARY_DIR}/icub_firmware_shared-config.cmake.install
         RENAME icub_firmware_shared-config.cmake)
 
 
-# # icub_firmware_shared-targets.cmake (build tree)
-# get_property(_targets GLOBAL PROPERTY icub_firmware_shared_TARGETS)
-# export(TARGETS ${_targets} ${manager_extra_libs}
-#        NAMESPACE ICUB_fw::
-#        FILE ${CMAKE_BINARY_DIR}/icub_firmware_shared-targets.cmake)
+# icub_firmware_shared-targets.cmake (build tree)
+get_property(_targets GLOBAL PROPERTY icub_firmware_shared_TARGETS)
+message("**********************************************")
+message(" targets are ${_targets}")
+message(" manager_extra_libs are ${manager_extra_libs}")
+message("**********************************************")
+
+export(TARGETS ${_targets} ${manager_extra_libs}
+#       NAMESPACE ICUB_fw::
+       FILE ${CMAKE_BINARY_DIR}/icub_firmware_shared-targets.cmake)
 
 # # icub_firmware_shared-targets.cmake (installed)
 # install(EXPORT ICUB_fw
