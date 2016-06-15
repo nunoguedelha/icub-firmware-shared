@@ -407,14 +407,11 @@ typedef struct
  **/
 typedef struct  
 {
+    int32_t                     offset0;
+    int32_t                     offset1;
+    int32_t                     offset2;
+    int32_t                     cable_range;
     int32_t                     pwm;
-    int32_t                     delta; 
-    int32_t                     cable_range;    
-    int16_t                     offset0;
-    int16_t                     offset1;
-    int16_t                     offset2;
-    int16_t                     offset3;
-    int32_t                     calibrationZero;
 } eOmc_calibrator_params_type11_cer_hands_t;
 
 // -- all the possible data holding structures used in a joint
